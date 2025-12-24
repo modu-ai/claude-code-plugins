@@ -1,0 +1,12 @@
+{
+  "name": "moai-security",
+  "description": "Auth0 security specialist plugin covering attack protection, MFA, token security, sender constraining, and compliance",
+  "version": "1.0.0",
+  "author": {
+    "name": "modu-ai"
+  },
+  "homepage": "https://github.com/modu-ai/claude-plugins/tree/main/plugins/moai-security",
+  "repository": "https://github.com/modu-ai/claude-plugins",
+  "license": "MIT",
+  "keywords": ["auth0", "security", "mfa", "compliance", "fapi", "owasp"]
+}
