@@ -7,11 +7,8 @@
     "email": "email@mo.ai.kr",
     "url": "https://github.com/modu-ai"
   },
-  "homepage": "https://github.com/modu-ai/claude-plugins/tree/main/plugins/astory-blog-writers",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/modu-ai/claude-plugins.git"
-  },
+  "homepage": "https://github.com/modu-ai/claude-code-plugins/tree/main/plugins/astory-blog-writers",
+  "repository": "https://github.com/modu-ai/claude-code-plugins.git",
   "license": "MIT",
   "keywords": [
     "blog",
@@ -23,8 +20,20 @@
     "anti-ai",
     "validation"
   ],
-  "commands": ["./commands/"],
-  "agents": ["./agents/"],
+  "commands": [
+    "./commands/post.md"
+  ],
+  "agents": [
+    "./agents/researcher.md",
+    "./agents/writer-analyst.md",
+    "./agents/writer-architect.md",
+    "./agents/writer-columnist.md",
+    "./agents/writer-curator.md",
+    "./agents/writer-developer.md",
+    "./agents/writer-mentor.md",
+    "./agents/writer-reviewer.md",
+    "./agents/writer-storyteller.md"
+  ],
   "skills": [
     "./skills/traits/",
     "./skills/personas/",
