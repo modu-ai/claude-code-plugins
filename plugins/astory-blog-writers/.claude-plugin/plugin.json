@@ -33,6 +33,5 @@
     "./skills/research/",
     "./skills/writing-standards/",
     "./skills/anti-ai-validator/"
-  ],
-  "hooks": "./hooks/hooks.json"
+  ]
 }
