@@ -1,68 +1,25 @@
 {
   "name": "claude-code-plugins",
-  "description": "MODU AI's Official Claude Code Plugin Marketplace - AI 개발 도구와 콘텐츠 생성 플러그인",
-  "version": "1.0.0",
-  "author": {
+  "owner": {
     "name": "MODU AI",
-    "email": "email@mo.ai.kr",
-    "url": "https://github.com/modu-ai"
+    "email": "email@mo.ai.kr"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/modu-ai/claude-code-plugins"
+  "metadata": {
+    "description": "MODU AI's Official Claude Code Plugin Marketplace - AI 개발 도구와 콘텐츠 생성 플러그인",
+    "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "astory-blog-writers",
-      "displayName": "aStory Hybrid Author System",
-      "description": "DNA 기반 8개 AI 저자 페르소나와 3가지 작성 모드(Solo/Crew/Adaptive)를 제공하는 종합 블로그 작성 시스템. 16개 특성 조합으로 256+ 페르소나 변형 가능.",
+      "source": "./plugins/astory-blog-writers",
+      "description": "DNA 기반 8개 AI 저자 페르소나와 3가지 작성 모드(Solo/Crew/Adaptive)를 제공하는 종합 블로그 작성 시스템",
       "version": "2.0.0",
-      "path": "./plugins/astory-blog-writers",
-      "keywords": [
-        "blog",
-        "writing",
-        "Korean",
-        "personas",
-        "collaboration",
-        "AI-writing",
-        "hybrid-author",
-        "crew-mode"
-      ],
-      "featured": true,
-      "category": "content-creation",
-      "features": [
-        "16 Trait DNA (Voice, Expertise, Perspective, Tone)",
-        "8 Preset Personas with unique DNA combinations",
-        "3 Writing Modes (Solo, Crew, Adaptive)",
-        "Anti-AI Pattern Validator with auto-fix",
-        "Korean writing standards & style guide",
-        "Research agent with citation management"
-      ],
-      "requirements": {
-        "claude-code": ">=1.0.0"
-      }
-    }
-  ],
-  "categories": [
-    {
-      "id": "content-creation",
-      "name": "Content Creation",
-      "description": "Plugins for creating and managing content"
-    },
-    {
-      "id": "development",
-      "name": "Development",
-      "description": "Plugins for software development workflows"
-    },
-    {
-      "id": "documentation",
-      "name": "Documentation",
-      "description": "Plugins for documentation and technical writing"
-    },
-    {
-      "id": "productivity",
-      "name": "Productivity",
-      "description": "Plugins for improving productivity"
+      "author": {
+        "name": "MODU AI",
+        "email": "email@mo.ai.kr"
+      },
+      "keywords": ["blog", "writing", "Korean", "personas", "AI-writing"],
+      "category": "content-creation"
     }
   ]
 }
