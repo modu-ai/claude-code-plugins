@@ -28,8 +28,16 @@
 ### 2단계: 플러그인 설치
 
 ```bash
-/plugin install astory-blog-writers@moai-cc-plugins
+/plugin install astory-blog-writers@moai-cc-plugins --scope project
 ```
+
+> **권장**: `--scope project` 옵션을 사용하면 저장소의 모든 협업자가 플러그인을 사용할 수 있습니다.
+>
+> | Scope     | 설명                                   |
+> | --------- | -------------------------------------- |
+> | `user`    | 본인만 사용 (기본값)                   |
+> | `project` | 저장소의 모든 협업자가 사용 **(권장)** |
+> | `local`   | 본인만, 이 저장소에서만 사용           |
 
 ## 플러그인 목록
 
@@ -89,8 +97,8 @@ aStory Blog Writers는 혁신적인 Hybrid Author System v2.0을 기반으로 �
 # 마켓플레이스 추가 (최초 1회)
 /plugin marketplace add modu-ai/claude-code-plugins
 
-# 플러그인 설치
-/plugin install astory-blog-writers@moai-cc-plugins
+# 플러그인 설치 (project scope 권장)
+/plugin install astory-blog-writers@moai-cc-plugins --scope project
 
 # 블로그 포스트 작성
 /astory:post "확장 가능한 마이크로서비스 구축 방법"
