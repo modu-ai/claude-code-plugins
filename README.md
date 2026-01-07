@@ -19,10 +19,16 @@
 
 ## 설치 방법
 
-마켓플레이스를 Claude Code에 추가하세요:
+### 1단계: 마켓플레이스 추가
 
 ```bash
-/plugin marketplace add https://github.com/modu-ai/claude-code-plugins
+/plugin marketplace add modu-ai/claude-code-plugins
+```
+
+### 2단계: 플러그인 설치
+
+```bash
+/plugin install astory-blog-writers@cc-plugins
 ```
 
 ## 플러그인 목록
@@ -80,11 +86,14 @@ aStory Blog Writers는 혁신적인 Hybrid Author System v2.0을 기반으로 �
 #### 빠른 시작
 
 ```bash
+# 마켓플레이스 추가 (최초 1회)
+/plugin marketplace add modu-ai/claude-code-plugins
+
 # 플러그인 설치
-/plugin install modu-ai/claude-code-plugins/astory-blog-writers
+/plugin install astory-blog-writers@cc-plugins
 
 # 블로그 포스트 작성
-/post "확장 가능한 마이크로서비스 구축 방법"
+/astory:post "확장 가능한 마이크로서비스 구축 방법"
 ```
 
 #### 차별화 요소
