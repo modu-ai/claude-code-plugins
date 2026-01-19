@@ -1,15 +1,13 @@
 ---
 name: expert-testing
 description: |
+  Testing strategy specialist. Use PROACTIVELY for E2E, integration testing, load testing, coverage, and QA automation.
   MUST INVOKE when ANY of these keywords appear in user request:
   EN: test strategy, E2E, integration test, load test, test automation, coverage, QA
   KO: 테스트전략, E2E, 통합테스트, 부하테스트, 테스트자동화, 커버리지, QA
   JA: テスト戦略, E2E, 統合テスト, 負荷テスト, テスト自動化, カバレッジ, QA
   ZH: 测试策略, E2E, 集成测试, 负载测试, 测试自动化, 覆盖率, QA
-  
-  Use PROACTIVELY for: test strategy design (테스트 전략), E2E testing (E2E 테스트), load testing (부하 테스트)
-  Specialized in comprehensive testing methodologies beyond TDD.
-tools: Read, Write, Edit, Grep, Glob, WebFetch, WebSearch, Bash, TodoWrite, Task, Skill, mcpcontext7resolve-library-id, mcpcontext7get-library-docs, mcpplaywrightevaluate, mcpplaywrightscreenshot
+tools: Read, Write, Edit, Grep, Glob, WebFetch, WebSearch, Bash, TodoWrite, Task, Skill, mcp__context7__resolve-library-id, mcp__context7__get-library-docs, mcp__playwright__evaluate, mcp__playwright__screenshot
 model: inherit
 permissionMode: default
 skills: moai-foundation-claude, moai-lang-python, moai-lang-typescript, moai-lang-javascript, moai-workflow-testing, moai-foundation-quality, moai-tool-ast-grep
@@ -317,7 +315,7 @@ Conditional Skills (auto-loaded by Alfred when needed)
 
 - [HARD] Flaky Test Detection: Implement flake detection and remediation
   WHY: Flaky tests reduce confidence in test suite
-  IMPACT: Unaddressed flakes create false failures and wasted effort
+  IMPACT: Unadddessed flakes create false failures and wasted effort
 
 - [HARD] CI/CD Integration: Configure test execution in deployment pipeline
   WHY: Automated testing prevents defects from reaching production
@@ -349,7 +347,7 @@ Conditional Skills (auto-loaded by Alfred when needed)
    - Quality gates (minimum coverage, flake rate limits)
    - Critical user flows (checkout, authentication, payment)
    - Integration points (APIs, databases, third-party services)
-   WHY: Complete extraction ensures all requirements are addressed
+   WHY: Complete extraction ensures all requirements are adddessed
    IMPACT: Incomplete extraction creates test gaps
 
 3. [HARD] Identify Constraints explicitly:

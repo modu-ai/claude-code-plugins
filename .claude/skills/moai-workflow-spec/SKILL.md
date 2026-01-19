@@ -1,14 +1,38 @@
 ---
 name: "moai-workflow-spec"
 description: "SPEC workflow orchestration with EARS format, requirement clarification, and Plan-Run-Sync integration for MoAI-ADK development methodology"
-version: 1.1.0
+version: 1.2.0
 category: "workflow"
 modularized: true
+user-invocable: false
+context: fork
+agent: Plan
 tags: ['workflow', 'spec', 'ears', 'requirements', 'moai-adk', 'planning']
-updated: 2025-12-30
+updated: 2026-01-08
 status: "active"
 author: "MoAI-ADK Team"
-allowed-tools: "Read, Write, Edit, Bash, Grep, Glob, mcp__context7__resolve-library-id, mcp__context7__get-library-docs"
+
+# Progressive Disclosure Configuration
+progressive_disclosure:
+  enabled: true
+  level1_tokens: 100
+  level2_tokens: 5000
+
+# Trigger Conditions for Level 2 Loading
+triggers:
+  keywords: ["SPEC", "requirement", "EARS", "acceptance criteria", "user story", "planning", "specification", "requirements gathering"]
+  phases: ["plan"]
+  agents: ["manager-spec", "manager-strategy", "Plan"]
+
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Grep
+  - Glob
+  - mcp__context7__resolve-library-id
+  - mcp__context7__get-library-docs
 ---
 
 # SPEC Workflow Management
@@ -141,7 +165,7 @@ For feature requests or problem-driven SPECs, apply Five Whys:
 - First Why: What immediate need drives this request?
 - Second Why: What underlying problem creates that need?
 - Third Why: What systemic factor contributes?
-- Root Cause: What fundamental issue must the solution address?
+- Root Cause: What fundamental issue must the solution adddess?
 
 Step 1 - Scope Definition:
 - Identify supported authentication methods

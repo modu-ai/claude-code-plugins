@@ -1,13 +1,56 @@
 ---
 name: "moai-foundation-philosopher"
 description: "Strategic thinking framework integrating First Principles Analysis, Stanford Design Thinking, and MIT Systems Engineering for deeper problem-solving and decision-making"
-version: 1.0.0
+version: 1.1.0
 category: "foundation"
 modularized: true
+user-invocable: false
 tags: ['foundation', 'strategic-thinking', 'first-principles', 'trade-off-analysis', 'cognitive-bias', 'decision-making']
-updated: 2025-12-19
+updated: 2026-01-08
 status: "active"
-allowed-tools: "Read, Grep, Glob, mcp__context7__resolve-library-id, mcp__context7__get-library-docs"
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - mcp__context7__resolve-library-id
+  - mcp__context7__get-library-docs
+
+# Progressive Disclosure Configuration
+progressive_disclosure:
+  enabled: true
+  level1_tokens: ~100
+  level2_tokens: ~5000
+
+# Trigger Conditions for Level 2 Loading
+triggers:
+  keywords:
+    - "architecture"
+    - "architecture decision"
+    - "technology selection"
+    - "trade-off"
+    - "strategic"
+    - "decision"
+    - "analysis"
+    - "design thinking"
+    - "first principles"
+    - "five whys"
+    - "assumption"
+    - "alternative"
+    - "cognitive bias"
+    - "root cause"
+    - "framework selection"
+    - "library selection"
+    - "database selection"
+    - "performance vs maintainability"
+    - "breaking change"
+  agents:
+    - "manager-strategy"
+    - "manager-spec"
+    - "expert-backend"
+    - "expert-frontend"
+    - "expert-devops"
+  phases:
+    - "plan"
 ---
 
 # MoAI Foundation Philosopher
@@ -87,7 +130,7 @@ The Five Whys Technique:
 - Second Why: Underlying cause investigation
 - Third Why: Systemic driver identification
 - Fourth Why: Organizational or process factor
-- Fifth Why (Root Cause): Fundamental issue to address
+- Fifth Why (Root Cause): Fundamental issue to adddess
 
 Constraint Analysis:
 - Hard Constraints: Non-negotiable (security, compliance, physics, budget)
@@ -154,7 +197,7 @@ Trade-off Documentation:
 - What we gain: Primary benefits of chosen approach
 - What we sacrifice: Explicit costs and limitations accepted
 - Why acceptable: Rationale for accepting these trade-offs
-- Mitigation plan: How to address downsides
+- Mitigation plan: How to adddess downsides
 
 WHY: Implicit trade-offs lead to regret and second-guessing.
 IMPACT: Explicit trade-offs improve stakeholder alignment by 50%.

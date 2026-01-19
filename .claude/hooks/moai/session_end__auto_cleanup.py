@@ -18,6 +18,8 @@ Features:
 - Generate session summary message
 """
 
+from __future__ import annotations
+
 import json
 import logging
 import shutil
@@ -26,11 +28,24 @@ import sys
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
+
+# =============================================================================
+# Windows UTF-8 Encoding Fix (Issue #249)
+# Ensures emoji characters are properly displayed on Windows terminals
+# =============================================================================
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, OSError):
+        # Python < 3.7 or reconfigure not available
+        pass
 
 # Add module path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "src"))
 
+from lib.atomic_write import atomic_write_json  # noqa: E402
 from lib.path_utils import (  # noqa: E402
     ensure_moai_dir,
     find_project_root,
@@ -126,6 +141,8 @@ logger = logging.getLogger(__name__)
 def load_hook_timeout() -> int:
     """Load hook timeout from config.yaml (default: 5000ms)
 
+    Uses try/except instead of exists() check to prevent TOCTOU race conditions.
+
     Returns:
         Timeout in milliseconds
     """
@@ -133,17 +150,21 @@ def load_hook_timeout() -> int:
         import yaml
 
         config_file = get_safe_moai_path("config/config.yaml")
-        if config_file.exists():
-            with open(config_file, "r", encoding="utf-8") as f:
-                config: Dict[str, Any] = yaml.safe_load(f) or {}
-                return config.get("hooks", {}).get("timeout_ms", 5000)
+        # Direct open without exists() check to prevent race condition
+        with open(config_file, "r", encoding="utf-8") as f:
+            config: dict[str, Any] = yaml.safe_load(f) or {}
+            return config.get("hooks", {}).get("timeout_ms", 5000)
+    except FileNotFoundError:
+        pass  # Config file doesn't exist, use default
     except Exception:
-        pass
+        pass  # Config file corrupted or invalid, use default
     return 5000
 
 
 def get_graceful_degradation() -> bool:
     """Load graceful_degradation setting from config.yaml (default: true)
+
+    Uses try/except instead of exists() check to prevent TOCTOU race conditions.
 
     Returns:
         Whether graceful degradation is enabled
@@ -152,16 +173,18 @@ def get_graceful_degradation() -> bool:
         import yaml
 
         config_file = get_safe_moai_path("config/config.yaml")
-        if config_file.exists():
-            with open(config_file, "r", encoding="utf-8") as f:
-                config: Dict[str, Any] = yaml.safe_load(f) or {}
-                return config.get("hooks", {}).get("graceful_degradation", True)
+        # Direct open without exists() check to prevent race condition
+        with open(config_file, "r", encoding="utf-8") as f:
+            config: dict[str, Any] = yaml.safe_load(f) or {}
+            return config.get("hooks", {}).get("graceful_degradation", True)
+    except FileNotFoundError:
+        pass  # Config file doesn't exist, use default
     except Exception:
-        pass
+        pass  # Config file corrupted or invalid, use default
     return True
 
 
-def cleanup_old_files(config: Dict[str, Any]) -> Dict[str, int]:
+def cleanup_old_files(config: dict[str, Any]) -> dict[str, int]:
     """Clean up old files
 
     Args:
@@ -201,8 +224,8 @@ def cleanup_old_files(config: Dict[str, Any]) -> Dict[str, int]:
 def cleanup_directory(
     directory: Path,
     cutoff_date: datetime,
-    max_files: Optional[int],
-    patterns: List[str],
+    max_files: int | None,
+    patterns: list[str],
 ) -> int:
     """Clean up directory files
 
@@ -254,7 +277,7 @@ def cleanup_directory(
     return cleaned_count
 
 
-def save_session_metrics(payload: Dict[str, Any]) -> bool:
+def save_session_metrics(payload: dict[str, Any]) -> bool:
     """Save session metrics (P0-1)
 
     Args:
@@ -277,10 +300,9 @@ def save_session_metrics(payload: Dict[str, Any]) -> bool:
             "specs_worked_on": extract_specs_from_memory(),
         }
 
-        # Save session metrics
+        # Save session metrics using atomic write (H3)
         session_file = logs_dir / f"session-{session_metrics['session_id']}.json"
-        with open(session_file, "w", encoding="utf-8") as f:
-            json.dump(session_metrics, f, indent=2, ensure_ascii=False)
+        atomic_write_json(session_file, session_metrics, indent=2, ensure_ascii=False)
 
         logger.info(f"Session metrics saved: {session_file}")
         return True
@@ -290,7 +312,7 @@ def save_session_metrics(payload: Dict[str, Any]) -> bool:
         return False
 
 
-def save_work_state(payload: Dict[str, Any]) -> bool:
+def save_work_state(payload: dict[str, Any]) -> bool:
     """Save work state snapshot (P0-2)
 
     Args:
@@ -312,10 +334,9 @@ def save_work_state(payload: Dict[str, Any]) -> bool:
             "specs_in_progress": extract_specs_from_memory(),
         }
 
-        # Save state
+        # Save work state using atomic write (H3)
         state_file = get_safe_moai_path("memory/last-session-state.json")
-        with open(state_file, "w", encoding="utf-8") as f:
-            json.dump(work_state, f, indent=2, ensure_ascii=False)
+        atomic_write_json(state_file, work_state, indent=2, ensure_ascii=False)
 
         logger.info(f"Work state saved: {state_file}")
         return True
@@ -325,7 +346,7 @@ def save_work_state(payload: Dict[str, Any]) -> bool:
         return False
 
 
-def check_uncommitted_changes() -> Optional[str]:
+def check_uncommitted_changes() -> str | None:
     """Warn uncommitted changes (P0-3) using optimized Git operations
 
     Returns:
@@ -373,7 +394,7 @@ def check_uncommitted_changes() -> Optional[str]:
     return None
 
 
-def get_current_branch() -> Optional[str]:
+def get_current_branch() -> str | None:
     """Get current Git branch name using optimized Git operations
 
     Returns:
@@ -493,21 +514,28 @@ def count_recent_commits() -> int:
     return 0
 
 
-def extract_specs_from_memory() -> List[str]:
-    """Extract SPEC information from memory"""
-    specs = []
+def extract_specs_from_memory() -> list[str]:
+    """Extract SPEC information from memory
+
+    Uses try/except instead of exists() check to prevent TOCTOU race conditions.
+    """
+    specs: list[str] = []
 
     try:
         # Query recent SPECs from command_execution_state.json (use safe path)
         state_file = get_safe_moai_path("memory/command-execution-state.json")
-        if state_file.exists():
-            with open(state_file, "r", encoding="utf-8") as f:
-                state_data = json.load(f)
+        # Direct open without exists() check to prevent race condition
+        with open(state_file, "r", encoding="utf-8") as f:
+            state_data = json.load(f)
 
-            # Extract recent SPEC IDs
-            if "last_specs" in state_data:
-                specs = state_data["last_specs"][:3]  # Latest 3
+        # Extract recent SPEC IDs
+        if "last_specs" in state_data:
+            specs = state_data["last_specs"][:3]  # Latest 3
 
+    except FileNotFoundError:
+        pass  # State file doesn't exist yet, return empty list
+    except (json.JSONDecodeError, KeyError, TypeError) as e:
+        logger.warning(f"Failed to parse specs from memory: {e}")
     except Exception as e:
         logger.warning(f"Failed to extract specs from memory: {e}")
 
@@ -518,7 +546,7 @@ def extract_specs_from_memory() -> List[str]:
 # are now imported from lib.common (consolidated from duplicate implementations)
 
 
-def scan_root_violations(config: Dict[str, Any]) -> List[Dict[str, str]]:
+def scan_root_violations(config: dict[str, Any]) -> list[dict[str, str]]:
     """Scan project root for document management violations
 
     Args:
@@ -567,7 +595,7 @@ def scan_root_violations(config: Dict[str, Any]) -> List[Dict[str, str]]:
     return violations
 
 
-def generate_migration_report(violations: List[Dict[str, str]]) -> str:
+def generate_migration_report(violations: list[dict[str, str]]) -> str:
     """Generate migration suggestions report
 
     Args:
@@ -596,7 +624,7 @@ def generate_migration_report(violations: List[Dict[str, str]]) -> str:
 
 
 def generate_session_summary(
-    cleanup_stats: Dict[str, int], work_state: Dict[str, Any], violations_count: int = 0
+    cleanup_stats: dict[str, int], work_state: dict[str, Any], violations_count: int = 0
 ) -> str:
     """Generate session summary (P1-3)
 
@@ -636,7 +664,7 @@ def generate_session_summary(
     return "\n".join(summary_lines)
 
 
-def execute_session_end_workflow() -> tuple[Dict[str, Any], str]:
+def execute_session_end_workflow() -> tuple[dict[str, Any], str]:
     """Execute the session end workflow with proper error handling"""
     start_time = time.time()
 

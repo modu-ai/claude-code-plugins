@@ -1,28 +1,44 @@
-# Quality Settings
-# TDD and quality standards configuration
-
 quality:
-  # TDD settings
   tdd:
     enabled: true
     coverage_minimum: 80
     test_first: true
-
-  # TRUST 5 principles adoption
   trust5:
     test_first: true
     readable: true
     unified: true
     secured: true
     trackable: true
-
-  # Code review requirements
   code_review:
     required: true
     auto_review: true
-
-  # Documentation requirements
   documentation:
     skill_md_required: true
     readme_required: true
     changelog_required: true
+constitution:
+  development_mode: ddd
+  enforce_quality: true
+  test_coverage_target: 100
+  ddd_settings:
+    require_existing_tests: true
+    characterization_tests: true
+    behavior_snapshots: true
+    max_transformation_size: small
+  coverage_exemptions:
+    enabled: false
+    require_justification: true
+    max_exempt_percentage: 5
+  test_quality:
+    specification_based: true
+    meaningful_assertions: true
+    avoid_implementation_coupling: true
+    mutation_testing_enabled: false
+  principles:
+    simplicity:
+      max_parallel_tasks: 10
+report_generation:
+  enabled: true
+  auto_create: false
+  warn_user: true
+  user_choice: Minimal

@@ -14,12 +14,26 @@ Enhanced Features:
 - Risk assessment with performance metrics
 """
 
+from __future__ import annotations
+
 import json
 import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
+
+# =============================================================================
+# Windows UTF-8 Encoding Fix (Issue #249)
+# Ensures emoji characters are properly displayed on Windows terminals
+# =============================================================================
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, OSError):
+        # Python < 3.7 or reconfigure not available
+        pass
 
 # =============================================================================
 # Constants - Risk Assessment Thresholds
@@ -55,6 +69,7 @@ if str(LIB_DIR) not in sys.path:
     sys.path.insert(0, str(LIB_DIR))
 
 # Import path utils for project root resolution
+from lib.file_utils import check_file_size  # noqa: E402
 from lib.path_utils import find_project_root  # noqa: E402
 
 # Import unified timeout manager and Git operations manager
@@ -238,6 +253,13 @@ except ImportError:
         """Load a YAML file using PyYAML or simple parser."""
         if not file_path.exists():
             return {}
+
+        # Check file size before reading (H2: 10MB limit)
+        is_safe, error_msg = check_file_size(file_path)
+        if not is_safe:
+            # File too large or other error, skip loading
+            return {}
+
         try:
             content = file_path.read_text(encoding="utf-8")
             if HAS_YAML_FALLBACK:
@@ -268,9 +290,14 @@ except ImportError:
         if not config:
             json_config_path = config_dir / "config.json"
             if json_config_path.exists():
-                try:
-                    config = json.loads(json_config_path.read_text(encoding="utf-8"))
-                except (json.JSONDecodeError, OSError):
+                # Check file size before reading (H2: 10MB limit)
+                is_safe, _ = check_file_size(json_config_path)
+                if is_safe:
+                    try:
+                        config = json.loads(json_config_path.read_text(encoding="utf-8"))
+                    except (json.JSONDecodeError, OSError):
+                        config = {}
+                else:
                     config = {}
 
         # Merge section files (they take priority for their specific keys)
@@ -407,7 +434,7 @@ def check_git_initialized() -> bool:
         return False
 
 
-def get_git_info() -> Dict[str, Any]:
+def get_git_info() -> dict[str, Any]:
     """Get comprehensive git information using optimized Git operations manager
 
     FIXED: Handles git not initialized state properly
@@ -456,6 +483,7 @@ def get_git_info() -> Dict[str, Any]:
 
     # Fallback to basic Git operations
     try:
+        import concurrent.futures
         from concurrent.futures import ThreadPoolExecutor, as_completed
 
         # Define git commands to run in parallel
@@ -474,14 +502,27 @@ def get_git_info() -> Dict[str, Any]:
             # Submit all tasks
             futures = {executor.submit(_run_git_command_fallback, cmd): key for cmd, key in git_commands}
 
-            # Collect results as they complete
-            for future in as_completed(futures):
-                key = futures[future]
-                try:
-                    results[key] = future.result()
-                except (TimeoutError, RuntimeError):
-                    # Future execution timeout or runtime errors
-                    results[key] = ""
+            # Collect results as they complete with overall timeout
+            # FIX #254: Add timeout to prevent infinite waiting on stuck git operations
+            try:
+                for future in as_completed(futures, timeout=8):
+                    key = futures[future]
+                    try:
+                        results[key] = future.result()
+                    except (TimeoutError, RuntimeError):
+                        # Future execution timeout or runtime errors
+                        results[key] = ""
+            except concurrent.futures.TimeoutError:
+                # Overall timeout exceeded - use whatever results we have
+                logging.warning("Git operations timeout after 8 seconds - using partial results")
+                # Collect any completed futures before timeout
+                for future, key in futures.items():
+                    if future.done():
+                        try:
+                            if key not in results:
+                                results[key] = future.result()
+                        except (TimeoutError, RuntimeError):
+                            results[key] = ""
 
         # Process results with proper handling for empty values
         branch = results.get("branch", "")
@@ -625,7 +666,7 @@ def check_version_update() -> tuple[str, bool]:
 
         if version_cache_file.exists():
             try:
-                cache_data = json.loads(version_cache_file.read_text())
+                cache_data = json.loads(version_cache_file.read_text(encoding="utf-8"))
                 latest_version = cache_data.get("latest")
             except (json.JSONDecodeError, OSError, UnicodeDecodeError):
                 # Cache file read or JSON parsing errors
@@ -920,31 +961,35 @@ def format_session_output() -> str:
     ]
 
     # FIX #5: Add personalization or setup guidance (never show template variables)
+    # Multilingual support: ko, en, ja, zh
+    conv_lang = personalization.get("conversation_language", "en")
+
     if personalization.get("needs_setup", False):
         # Show setup guidance (based on conversation_language)
-        if personalization["is_korean"]:
-            output.append(
-                "   👋 환영합니다! 프로젝트를 시작하기 전에 "
-                "'/moai:0-project setting' 명령어로 사용자 이름과 설정을 구성해주세요"
-            )
-        else:
-            output.append(
-                "   👋 Welcome! Before starting, please run '/moai:0-project setting' "
-                "to configure your name and project settings"
-            )
+        # Guide user to generate project documentation with /moai:0-project
+        setup_messages = {
+            "ko": "   👋 환영합니다! '/moai:0-project' 명령어로 프로젝트 문서를 생성해주세요",
+            "ja": "   👋 ようこそ！'/moai:0-project' コマンドでプロジェクトドキュメントを生成してください",
+            "zh": "   👋 欢迎！请运行 '/moai:0-project' 命令生成项目文档",
+            "en": "   👋 Welcome! Please run '/moai:0-project' to generate project documentation",
+        }
+        output.append(setup_messages.get(conv_lang, setup_messages["en"]))
     elif personalization["has_personalization"]:
         user_greeting = personalization.get("personalized_greeting", "")
-        if user_greeting:
-            if personalization["is_korean"]:
-                greeting = f"   👋 다시 오신 것을 환영합니다, {user_greeting}!"
-            else:
-                greeting = f"   👋 Welcome back, {user_greeting}!"
-        else:
-            if personalization["is_korean"]:
-                greeting = f"   👋 다시 오신 것을 환영합니다, {personalization['user_name']}님!"
-            else:
-                greeting = f"   👋 Welcome back, {personalization['user_name']}!"
-        output.append(greeting)
+        user_name = personalization.get("user_name", "")
+        display_name = user_greeting if user_greeting else user_name
+
+        # Prevent duplicate honorifics (e.g., "님님" in Korean, "さんさん" in Japanese)
+        ko_suffix = "" if display_name.endswith("님") else "님"
+        ja_suffix = "" if display_name.endswith("さん") else "さん"
+
+        welcome_back_messages = {
+            "ko": f"   👋 다시 오신 것을 환영합니다, {display_name}{ko_suffix}!",
+            "ja": f"   👋 おかえりなさい、{display_name}{ja_suffix}！",
+            "zh": f"   👋 欢迎回来，{display_name}！",
+            "en": f"   👋 Welcome back, {display_name}!",
+        }
+        output.append(welcome_back_messages.get(conv_lang, welcome_back_messages["en"]))
 
     # Configuration source is now handled silently for cleaner output
     # Users can check configuration using dedicated tools if needed
@@ -998,7 +1043,7 @@ def main() -> None:
         session_output = format_session_output() if show_messages else ""
 
         # Return as system message
-        result: Dict[str, Any] = {
+        result: dict[str, Any] = {
             "continue": True,
             "systemMessage": session_output,
             "performance": {
@@ -1024,7 +1069,7 @@ def main() -> None:
 
         except HookTimeoutError as e:
             # Enhanced timeout error handling
-            timeout_response: Dict[str, Any] = {
+            timeout_response: dict[str, Any] = {
                 "continue": True,
                 "systemMessage": "⚠️ Session start timeout - continuing without project info",
                 "error_details": {
@@ -1040,7 +1085,7 @@ def main() -> None:
 
         except Exception as e:
             # Enhanced error handling with context
-            error_response: Dict[str, Any] = {
+            error_response: dict[str, Any] = {
                 "continue": True,
                 "systemMessage": "⚠️ Session start encountered an error - continuing",
                 "error_details": {
@@ -1070,7 +1115,7 @@ def main() -> None:
 
             except PlatformTimeoutError:
                 # Timeout - return minimal valid response
-                timeout_response_legacy: Dict[str, Any] = {
+                timeout_response_legacy: dict[str, Any] = {
                     "continue": True,
                     "systemMessage": "⚠️ Session start timeout - continuing without project info",
                 }
@@ -1102,7 +1147,7 @@ def main() -> None:
 
         except json.JSONDecodeError as e:
             # JSON parse error
-            json_error_response: Dict[str, Any] = {
+            json_error_response: dict[str, Any] = {
                 "continue": True,
                 "hookSpecificOutput": {"error": f"JSON parse error: {e}"},
             }
@@ -1112,7 +1157,7 @@ def main() -> None:
 
         except Exception as e:
             # Unexpected error
-            general_error_response: Dict[str, Any] = {
+            general_error_response: dict[str, Any] = {
                 "continue": True,
                 "hookSpecificOutput": {"error": f"SessionStart error: {e}"},
             }

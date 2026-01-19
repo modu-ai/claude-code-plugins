@@ -220,3 +220,19 @@ secret-*.*
 # uv.lock is intentionally included for reproducible builds
 # Add to .gitignore if needed per project
 # uv.lock
+# Environment files
+# Python Cache & Bytecode
+# Version: 0.33.0
+# ===========================================
+# Updated: 2026-01-10
+# Build Tools & Frameworks
+# Private keys (specific patterns to avoid false positives)
+# Secrets and Credentials (CRITICAL)
+# Claude Code Configuration
+# Skill-specific credentials
+# Credential patterns in environment files
+# Deployment & CI/CD
+.nuxt/
+.turbo/
+dist-ssr/
+# Build Artifacts & Distribution

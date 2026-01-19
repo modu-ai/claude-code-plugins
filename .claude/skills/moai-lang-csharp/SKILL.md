@@ -1,12 +1,32 @@
 ---
 name: "moai-lang-csharp"
 description: "C# 12 / .NET 8 development specialist covering ASP.NET Core, Entity Framework, Blazor, and modern C# patterns. Use when developing .NET APIs, web applications, or enterprise solutions."
-version: 2.0.0
+version: 2.1.0
 category: "language"
 modularized: true
-allowed-tools: "Read, Grep, Glob, mcp__context7__resolve-library-id, mcp__context7__get-library-docs"
-context7-libraries: ['/dotnet/aspnetcore', '/dotnet/efcore', '/dotnet/runtime']
-updated: 2026-01-06
+
+# Progressive Disclosure Configuration
+progressive_disclosure:
+  enabled: true
+  level1_tokens: ~100
+  level2_tokens: ~5000
+
+# Trigger Conditions for Level 2 Loading
+triggers:
+  keywords: ["C#", "Csharp", ".NET", "ASP.NET", "Entity Framework", "Blazor", ".cs", ".csproj", ".sln", "dotnet"]
+  languages: ["csharp", "c#"]
+
+user-invocable: false
+tags:
+  ["language", "csharp", "dotnet", "aspnet-core", "entity-framework", "blazor"]
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - mcp__context7__resolve-library-id
+  - mcp__context7__get-library-docs
+context7-libraries: ["/dotnet/aspnetcore", "/dotnet/efcore", "/dotnet/runtime"]
+updated: 2026-01-11
 status: "active"
 ---
 
@@ -19,6 +39,7 @@ Modern C# development with ASP.NET Core, Entity Framework Core, Blazor, and ente
 Auto-Triggers: `.cs`, `.csproj`, `.sln` files, C# projects, .NET solutions, ASP.NET Core applications
 
 Core Stack:
+
 - C# 12: Primary constructors, collection expressions, alias any type, default lambda parameters
 - .NET 8: Minimal APIs, Native AOT, improved performance, WebSockets
 - ASP.NET Core 8: Controllers, Endpoints, Middleware, Authentication
@@ -27,21 +48,14 @@ Core Stack:
 - Testing: xUnit, NUnit, FluentAssertions, Moq
 
 Quick Commands:
-```bash
-# Create .NET 8 Web API project
-dotnet new webapi -n MyApi --framework net8.0
 
-# Create Blazor Web App
-dotnet new blazor -n MyBlazor --interactivity Auto
+To create a new .NET 8 Web API project, run dotnet new webapi with -n flag for project name and --framework net8.0.
 
-# Add Entity Framework Core
-dotnet add package Microsoft.EntityFrameworkCore.SqlServer
-dotnet add package Microsoft.EntityFrameworkCore.Design
+To create a Blazor Web App, run dotnet new blazor with -n flag for project name and --interactivity Auto.
 
-# Add FluentValidation and MediatR
-dotnet add package FluentValidation.AspNetCore
-dotnet add package MediatR
-```
+To add Entity Framework Core, run dotnet add package Microsoft.EntityFrameworkCore.SqlServer followed by Microsoft.EntityFrameworkCore.Design.
+
+To add FluentValidation and MediatR, run dotnet add package FluentValidation.AspNetCore and dotnet add package MediatR.
 
 ---
 
@@ -50,19 +64,24 @@ dotnet add package MediatR
 This skill uses progressive disclosure with specialized modules for deep coverage:
 
 ### Language Features
+
 - [C# 12 Features](modules/csharp12-features.md) - Primary constructors, collection expressions, type aliases, default lambdas
 
 ### Web Development
+
 - [ASP.NET Core 8](modules/aspnet-core.md) - Minimal API, Controllers, Middleware, Authentication
 - [Blazor Components](modules/blazor-components.md) - Server, WASM, InteractiveServer, Components
 
 ### Data Access
+
 - [Entity Framework Core 8](modules/efcore-patterns.md) - DbContext, Repository pattern, Migrations, Query optimization
 
 ### Architecture Patterns
+
 - [CQRS and Validation](modules/cqrs-validation.md) - MediatR CQRS, FluentValidation, Handler patterns
 
 ### Reference Materials
+
 - [API Reference](reference.md) - Complete API reference, Context7 library mappings
 - [Code Examples](examples.md) - Production-ready examples, testing templates
 
@@ -72,110 +91,39 @@ This skill uses progressive disclosure with specialized modules for deep coverag
 
 ### Project Structure (Clean Architecture)
 
-```
-src/
-├── MyApp.Api/              # ASP.NET Core Web API
-│   ├── Controllers/        # API Controllers
-│   ├── Endpoints/          # Minimal API endpoints
-│   └── Program.cs          # Application entry
-├── MyApp.Application/      # Business logic layer
-│   ├── Commands/           # CQRS Commands
-│   ├── Queries/            # CQRS Queries
-│   └── Validators/         # FluentValidation
-├── MyApp.Domain/           # Domain entities
-│   ├── Entities/           # Domain models
-│   └── Interfaces/         # Repository interfaces
-└── MyApp.Infrastructure/   # Data access layer
-    ├── Data/               # DbContext
-    └── Repositories/       # Repository implementations
-```
+Organize projects in a src folder with four main projects. MyApp.Api contains the ASP.NET Core Web API layer with Controllers folder for API Controllers, Endpoints folder for Minimal API endpoints, and Program.cs as the application entry point. MyApp.Application contains business logic including Commands folder for CQRS Commands, Queries folder for CQRS Queries, and Validators folder for FluentValidation. MyApp.Domain contains domain entities including Entities folder for domain models and Interfaces folder for repository interfaces. MyApp.Infrastructure contains data access including Data folder for DbContext and Repositories folder for repository implementations.
 
 ### Essential Patterns
 
-Primary Constructor with DI:
-```csharp
-public class UserService(IUserRepository repository, ILogger<UserService> logger)
-{
-    public async Task<User?> GetByIdAsync(Guid id)
-    {
-        logger.LogInformation("Fetching user {UserId}", id);
-        return await repository.FindByIdAsync(id);
-    }
-}
-```
+Primary Constructor with DI: Define a public class UserService with constructor parameters for IUserRepository and ILogger of UserService. Create async methods like GetByIdAsync that take Guid id, log information using the logger with structured logging for UserId, and return the result from repository.FindByIdAsync.
 
-Minimal API Endpoint:
-```csharp
-app.MapGet("/api/users/{id:guid}", async (Guid id, IUserService service) =>
-{
-    var user = await service.GetByIdAsync(id);
-    return user is not null ? Results.Ok(user) : Results.NotFound();
-})
-.WithName("GetUser")
-.WithOpenApi();
-```
+Minimal API Endpoint: Use app.MapGet with route pattern like "/api/users/{id:guid}" and an async lambda taking Guid id and IUserService. Call the service method, check for null result, and return Results.Ok for found entities or Results.NotFound otherwise. Chain WithName for route naming and WithOpenApi for OpenAPI documentation.
 
-Entity Configuration:
-```csharp
-public class UserConfiguration : IEntityTypeConfiguration<User>
-{
-    public void Configure(EntityTypeBuilder<User> builder)
-    {
-        builder.HasKey(u => u.Id);
-        builder.Property(u => u.Email).HasMaxLength(256).IsRequired();
-        builder.HasIndex(u => u.Email).IsUnique();
-    }
-}
-```
+Entity Configuration: Create a class implementing IEntityTypeConfiguration of your entity type. In the Configure method taking EntityTypeBuilder, call HasKey to set the primary key, use Property to configure fields with HasMaxLength and IsRequired, and use HasIndex with IsUnique for unique constraints.
 
 ---
 
 ## Context7 Integration
 
-For latest documentation, use Context7 MCP tools:
+For latest documentation, use Context7 MCP tools.
 
-```
-# ASP.NET Core documentation
-mcp__context7__resolve-library-id("aspnetcore")
-mcp__context7__get-library-docs("/dotnet/aspnetcore", "minimal-apis middleware")
+For ASP.NET Core documentation, first resolve the library ID using mcp__context7__resolve-library-id with "aspnetcore", then fetch docs using mcp__context7__get-library-docs with the resolved library ID and topic like "minimal-apis middleware".
 
-# Entity Framework Core documentation
-mcp__context7__resolve-library-id("efcore")
-mcp__context7__get-library-docs("/dotnet/efcore", "dbcontext migrations")
+For Entity Framework Core documentation, resolve with "efcore" and fetch with topics like "dbcontext migrations".
 
-# .NET Runtime documentation
-mcp__context7__resolve-library-id("dotnet runtime")
-mcp__context7__get-library-docs("/dotnet/runtime", "collections threading")
-```
+For .NET Runtime documentation, resolve with "dotnet runtime" and fetch with topics like "collections threading".
 
 ---
 
 ## Quick Troubleshooting
 
-Build and Runtime:
-```bash
-dotnet build --verbosity detailed    # Detailed build output
-dotnet run --launch-profile https    # Run with HTTPS profile
-dotnet ef database update            # Apply EF migrations
-dotnet ef migrations add Initial     # Create new migration
-```
+Build and Runtime: Run dotnet build with --verbosity detailed for detailed output. Run dotnet run with --launch-profile https for HTTPS profile. Run dotnet ef database update to apply EF migrations. Run dotnet ef migrations add with migration name to create new migrations.
 
 Common Patterns:
-```csharp
-// Null reference handling
-var user = await context.Users.FindAsync(id);
-ArgumentNullException.ThrowIfNull(user, nameof(user));
 
-// Async enumerable for streaming
-public async IAsyncEnumerable<User> StreamUsersAsync(
-    [EnumeratorCancellation] CancellationToken ct = default)
-{
-    await foreach (var user in context.Users.AsAsyncEnumerable().WithCancellation(ct))
-    {
-        yield return user;
-    }
-}
-```
+For null reference handling, use ArgumentNullException.ThrowIfNull with the variable and nameof expression after fetching from context.
+
+For async enumerable streaming, create async methods returning IAsyncEnumerable of your type. Add EnumeratorCancellation attribute to the CancellationToken parameter. Use await foreach with AsAsyncEnumerable and WithCancellation to iterate, yielding each item.
 
 ---
 

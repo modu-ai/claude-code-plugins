@@ -20,6 +20,18 @@
       },
       "keywords": ["blog", "writing", "Korean", "personas", "AI-writing"],
       "category": "content-creation"
+    },
+    {
+      "name": "moai-platform-appintoss",
+      "source": "./plugins/moai-platform-appintoss",
+      "description": "앱인토스(Apps in Toss) 미니앱 개발 전문가. WebView/React Native SDK, TDS(Toss Design System), Unity WebGL, Cocos Creator, 토스 로그인/결제, 푸시 알림, 광고 통합을 다룹니다.",
+      "version": "2.2.0",
+      "author": {
+        "name": "MODU AI",
+        "url": "https://github.com/modu-ai"
+      },
+      "keywords": ["appintoss", "toss", "miniapp", "granite", "webview", "react-native", "payment", "unity", "cocos", "game", "tds"],
+      "category": "platform"
     }
   ]
 }

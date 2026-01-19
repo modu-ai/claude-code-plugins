@@ -1,22 +1,20 @@
-# Project Settings
-# Project metadata and configuration
-
 project:
-  name: "claude-code-plugins"
-  description: "Claude Code plugins and marketplace"
-  type: "claude-code-plugin"
-
-# Project structure
+  name: claude-code-plugins
+  description: Claude Code plugins and marketplace
+  type: claude-code-plugin
+  locale: '{{LOCALE}}'
+  created_at: ''
+  initialized: false
 structure:
-  type: "plugin-directory"
+  type: plugin-directory
   directories:
-    skills: ".claude/skills/"
-    agents: ".claude/agents/"
-    commands: ".claude/commands/"
-    plugins: "plugins/"
-
-# Marketplace configuration
+    skills: .claude/skills/
+    agents: .claude/agents/
+    commands: .claude/commands/
+    plugins: plugins/
 marketplace:
   enabled: true
-  manifest: "marketplace.json"
+  manifest: marketplace.json
   version_pinning: true
+github:
+  profile_name: ''

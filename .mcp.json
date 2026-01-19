@@ -1,8 +1,12 @@
 {
   "mcpServers": {
     "context7": {
+      "$comment": "Cross-platform MCP configuration - see .mcp.windows.json for Windows",
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
     }
   },
   "staggeredStartup": {
