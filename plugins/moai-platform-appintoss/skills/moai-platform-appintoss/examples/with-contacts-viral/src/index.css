@@ -1,0 +1,190 @@
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-drag: none;
+  touch-action: none;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.safe-area {
+  width: 100%;
+  height: 100%;  
+}
+
+.status-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 24px;
+  padding-bottom: 12px;
+}
+
+.status-panel-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.status-panel-left-item {
+  display: flex;
+  align-items: center;  
+  gap: 2px;
+}
+
+.status-panel-item-text {
+  font-size: 16px;
+  font-weight: 700;
+  padding-bottom: 2px;
+}
+
+.status-panel-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.minesweeper-grid {
+  display: grid;
+  width: 100%;
+  padding-inline: 24px;
+  grid-template-columns: repeat(var(--cols, 5), 1fr);
+  gap: 4px;
+  align-items: start;
+}
+
+.cell-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 24px;
+  width: 70%;
+  height: 70%;
+  user-select: none;
+  pointer-events: none;
+}
+
+.cell-icon {
+  display: inline-flex;
+  width: 70%;
+  aspect-ratio: 1;
+  user-select: none;
+  pointer-events: none;
+}
+
+.cell-container {
+  aspect-ratio: 1;
+  position: relative;
+  width: 100%;
+}
+
+.cell-button {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes cell-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.cell-enter {
+  animation-name: cell-in;
+  animation-duration: 320ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+.cell-flip-container {
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+}
+
+.cell-flip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.cell-flip.flipped {
+  transform: rotateY(180deg);
+}
+
+.cell-front,
+.cell-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell-front {
+  transform: rotateY(0deg);
+}
+
+.cell-back {
+  transform: rotateY(180deg);
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-top: 42px;
+  padding-inline: 24px;
+}
+
+.difficulty-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.heart-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.heart {
+  width: 100%;
+  height: 100%;
+  scale: 2;
+  object-fit: contain;
+}
+

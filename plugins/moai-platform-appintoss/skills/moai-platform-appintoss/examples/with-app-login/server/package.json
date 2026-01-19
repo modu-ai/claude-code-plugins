@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "packageManager": "yarn@4.9.1"
+}

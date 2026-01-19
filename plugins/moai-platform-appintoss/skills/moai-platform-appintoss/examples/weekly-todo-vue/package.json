@@ -1,0 +1,33 @@
+{
+  "name": "weekly-todo-vue",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "granite dev",
+    "build": "granite build",
+    "preview": "vite preview",
+    "deploy": "ait deploy"
+  },
+  "dependencies": {
+    "@apps-in-toss/web-framework": "1.5.2",
+    "@granite-js/plugin-router": "0.1.21",
+    "@vueuse/core": "^13.1.0",
+    "date-fns": "^4.1.0",
+    "nanoid": "^5.0.9",
+    "remixicon": "^4.6.0",
+    "sortablejs": "^1.15.6",
+    "vue": "^3.5.13",
+    "vuedraggable": "^4.1.0"
+  },
+  "devDependencies": {
+    "@granite-js/plugin-router": "0.1.21",
+    "@types/sortablejs": "^1.15.8",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/tsconfig": "^0.7.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.1.0",
+    "vue-tsc": "^2.2.0"
+  },
+  "packageManager": "yarn@4.9.1"
+}

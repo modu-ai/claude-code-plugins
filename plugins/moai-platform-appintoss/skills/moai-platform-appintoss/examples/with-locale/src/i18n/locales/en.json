@@ -1,0 +1,6 @@
+{
+  "localeExample": {
+    "title": "Locale Example",
+    "description": "Use 'getLocale' to make your app multilingual. Providing users with a language they're familiar with helps improve usability."
+  }
+}

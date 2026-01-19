@@ -1,0 +1,17 @@
+# Node.js 기본
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# 로그 파일
+logs/
+*.log
+
+# Editor 관련 파일 (VSCode, JetBrains 등)
+.vscode/
+.idea/
+
+# OS 관련 파일
+.DS_Store
+Thumbs.db

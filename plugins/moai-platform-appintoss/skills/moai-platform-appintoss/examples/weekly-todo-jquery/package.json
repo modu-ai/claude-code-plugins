@@ -1,0 +1,42 @@
+{
+  "name": "weekly-todo-jquery",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "granite dev",
+    "build": "granite build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "ait deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
+    "@granite-js/plugin-router": "0.1.21",
+    "@types/sortablejs": "^1.15.8",
+    "babel-loader": "^9.2.1",
+    "css-loader": "^7.1.2",
+    "fork-ts-checker-webpack-plugin": "^9.0.2",
+    "html-webpack-plugin": "^5.6.3",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0"
+  },
+  "dependencies": {
+    "@apps-in-toss/web-framework": "1.5.2",
+    "@granite-js/plugin-router": "0.1.21",
+    "@types/jquery": "^3.5.32",
+    "date-fns": "^4.1.0",
+    "jquery": "^3.7.1",
+    "nanoid": "^5.1.0",
+    "remixicon": "^4.6.0",
+    "sortablejs": "^1.15.6"
+  },
+  "packageManager": "yarn@4.9.1"
+}

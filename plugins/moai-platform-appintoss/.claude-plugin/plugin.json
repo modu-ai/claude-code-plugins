@@ -1,0 +1,38 @@
+{
+  "name": "moai-platform-appintoss",
+  "version": "2.2.0",
+  "description": "앱인토스(Apps in Toss) 미니앱 개발 전문가. WebView/React Native SDK, TDS(Toss Design System), Unity WebGL, Cocos Creator, 토스 로그인/결제, 푸시 알림, 광고 통합을 다룹니다. 토스 앱 내 미니앱 개발, Granite 프레임워크 사용, 토스페이 결제 연동, 게임 개발 시 사용하세요.",
+  "author": {
+    "name": "GoosLab",
+    "url": "https://github.com/modu-ai"
+  },
+  "homepage": "https://developers-apps-in-toss.toss.im",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/modu-ai/cc-plugins"
+  },
+  "license": "MIT",
+  "keywords": [
+    "appintoss",
+    "앱인토스",
+    "toss",
+    "토스",
+    "miniapp",
+    "미니앱",
+    "granite",
+    "webview",
+    "react-native",
+    "토스페이",
+    "payment",
+    "결제",
+    "unity",
+    "cocos",
+    "game",
+    "게임",
+    "webgl",
+    "tds",
+    "디자인시스템",
+    "design-system"
+  ],
+  "skills": ["./skills/"]
+}

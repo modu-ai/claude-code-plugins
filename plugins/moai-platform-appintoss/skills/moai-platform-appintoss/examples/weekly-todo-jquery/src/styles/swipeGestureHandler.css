@@ -1,0 +1,9 @@
+.swipe-gesture-container {
+  transform: translateX(0px);
+  transition: transform 0.3s ease-in-out;
+  position: relative;
+  width: 100%;
+  padding-inline: 8px;
+  z-index: 50;
+  background-color: var(--color-gray-200);
+}

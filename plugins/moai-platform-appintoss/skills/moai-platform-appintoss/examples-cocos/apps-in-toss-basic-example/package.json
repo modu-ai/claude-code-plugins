@@ -1,0 +1,18 @@
+{
+  "name": "apps-in-toss-basic-example",
+  "uuid": "abe6c4c3-453f-4f14-97a8-97f142638755",
+  "creator": {
+    "version": "3.8.7"
+  },
+  "scripts": {
+    "cocos:dev": "/Applications/Cocos/Creator/3.8.7/CocosCreator.app/Contents/MacOS/CocosCreator --project .",
+    "cocos:build": "/Applications/Cocos/Creator/3.8.7/CocosCreator.app/Contents/MacOS/CocosCreator --project . --build \"platform=web-mobile;outputName=.\" || true",
+    "dev": "granite dev",
+    "build": "granite build",
+    "deploy": "ait deploy"
+  },
+  "dependencies": {
+    "@apps-in-toss/web-framework": "^1.5.2"
+  },
+  "devDependencies": {}
+}

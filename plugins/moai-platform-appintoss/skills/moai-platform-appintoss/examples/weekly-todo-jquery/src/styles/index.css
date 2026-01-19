@@ -1,0 +1,104 @@
+:root {
+  font-family: "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-x pan-y;
+
+  /* size */
+  --bottom-reply-height: 85px;
+  --icon-size-md: 24px;
+
+  /* rounded */
+  --rounded-xs: 6px;
+  --rounded-sm: 12px;
+  --rounded-md: 20px;
+  --rounded-lg: 32px;
+
+  /* color */
+  --color-gray-100: #ffffff;
+  --color-gray-200: #fafafc;
+  --color-gray-300: #e2e2e2;
+  --color-gray-300-alpha: #e2e2e299;
+  --color-gray-400: #bebec0;
+  --color-gray-500: #9b9b9b;
+  --color-gray-700: #303030;
+  --color-gray-800: #181818;
+  --color-blue-400: #3081fb;
+  --color-blue-500: #1960ca;
+  --color-blue-700: #134694;
+  --color-yellow-400: #fed85d;
+  --color-red-400: #ff4545;
+}
+
+html,
+body,
+#root {
+  width: 100vw;
+  height: 100dvh;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-gray-800);
+}
+
+ul,
+li,
+h3,
+p,
+button {
+  border: initial;
+  margin: 0;
+  padding: 0;
+}
+
+h3,
+p {
+  line-height: 125%;
+}
+
+ul {
+  list-style: none;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-user-select: none; /* iOS Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* 기본 */
+}
+
+#root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--min-height);
+  min-height: var(--min-height);
+  padding-top: var(--top-padding, 0px);
+  padding-bottom: calc(var(--bottom-reply-height) + var(--bottom-padding, 0px));
+}
+
+.task-container {
+  width: 100%;
+  height: 70%;
+  flex: 1;
+  padding-block: 40px;
+  padding-inline: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  background-color: var(--color-gray-200);
+  border-top-left-radius: var(--rounded-lg);
+  border-top-right-radius: var(--rounded-lg);
+  overflow: hidden auto;
+}

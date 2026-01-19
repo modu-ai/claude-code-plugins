@@ -1,0 +1,32 @@
+.checkbox {
+  position: relative;
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--icon-size-md);
+  color: var(--color-gray-400);
+}
+
+.checkbox
+  input[type="checkbox"]
+  ~ :is(:global(.active-icon), :global(.inactive-icon)) {
+  position: absolute;
+  transition: 200ms ease-in-out;
+  opacity: 0;
+}
+
+.checkbox input[type="checkbox"]:checked ~ :global(.active-icon) {
+  opacity: 1;
+}
+
+.checkbox input[type="checkbox"]:not(:checked) ~ :global(.inactive-icon) {
+  opacity: 1;
+}
+
+.checkbox
+  input[type="checkbox"]:disabled
+  ~ :is(:global(.active-icon), :global(.inactive-icon)) {
+  opacity: 0;
+}

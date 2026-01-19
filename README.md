@@ -115,10 +115,100 @@ aStory Blog Writers는 혁신적인 Hybrid Author System v2.0을 기반으로 �
 - **AI 탐지 방지**: 진정성 있는 목소리 유지를 위한 자동 검증
 - **독립 실행**: MoAI-ADK 의존성 없이 어디서나 사용 가능
 
+---
+
+### moai-platform-appintoss (v2.2.0)
+
+> 앱인토스(Apps in Toss) 미니앱 개발 전문가
+
+앱인토스는 파트너사가 개발한 서비스를 토스 앱 내부에서 App-in-App 형태로 제공하는 플랫폼입니다. 3,000만 토스 사용자에게 서비스를 노출할 수 있습니다.
+
+#### 핵심 기능
+
+**개발 플랫폼 지원**
+
+| 플랫폼 | 프레임워크 | 용도 |
+|--------|-----------|------|
+| WebView | Vite + React + TypeScript | 일반 미니앱 |
+| React Native | Granite Framework | 네이티브 기능 활용 |
+| Unity | WebGL Build | 게임 개발 |
+| Cocos | Cocos Creator 3.8.7 | 게임 개발 |
+
+**TDS (Toss Design System)**
+
+- **TDS Mobile**: WebView용 디자인 시스템 (`@toss/tds-mobile`)
+- **TDS React Native**: Granite용 디자인 시스템 (`@toss/tds-react-native`)
+- 색상 팔레트, 타이포그래피, 40+ 컴포넌트 제공
+
+**통합 기능**
+
+| 기능 | 설명 |
+|------|------|
+| 토스 로그인 | OAuth2 기반 사용자 인증 |
+| 토스페이 | mTLS 인증 기반 결제 시스템 |
+| 인앱 결제 | App Store / Google Play IAP |
+| 푸시 알림 | 프로모션/기능성 메시지 |
+| 광고 | 전면 광고, 보상형 광고 |
+| 프로모션 | 토스 포인트 리워드 |
+
+#### 빠른 시작
+
+```bash
+# 마켓플레이스 추가 (최초 1회)
+/plugin marketplace add modu-ai/cc-plugins
+
+# 플러그인 설치 (project scope 권장)
+/plugin install moai-platform-appintoss@moai-cc-plugins --scope project
+```
+
+**WebView 프로젝트:**
+
+```bash
+npm create vite@latest my-app -- --template react-ts
+cd my-app
+npm install @apps-in-toss/web-framework @toss/tds-mobile
+npx ait init
+```
+
+**React Native (Granite) 프로젝트:**
+
+```bash
+npm create granite-app
+cd my-granite-app
+npm install @apps-in-toss/framework @toss/tds-react-native
+npx ait init
+```
+
+#### 모듈 구성
+
+| 모듈 | 설명 |
+|------|------|
+| getting-started.md | 플랫폼 개요, 온보딩, 요구사항 |
+| development.md | WebView/React Native 설정, 디버깅 |
+| authentication.md | 토스 로그인, 게임 로그인, 토스 인증 |
+| payment.md | 토스페이, 인앱 결제, mTLS |
+| marketing.md | 푸시 알림, 광고, 프로모션 |
+| launch.md | 검수 프로세스, 체크리스트 |
+| monetization.md | 수익 구조, 정산, Biz Wallet |
+| unity-guide.md | Unity WebGL 게임 개발 가이드 |
+| cocos-guide.md | Cocos Creator 게임 개발 가이드 |
+| tds-mobile.md | TDS Mobile 컴포넌트 가이드 |
+| tds-react-native.md | TDS React Native 컴포넌트 가이드 |
+| examples-index.md | 24+ 공식 예제 코드 인덱스 |
+
+#### 리소스
+
+- **공식 개발자센터**: [developers-apps-in-toss.toss.im](https://developers-apps-in-toss.toss.im)
+- **TDS Mobile**: [tossmini-docs.toss.im/tds-mobile](https://tossmini-docs.toss.im/tds-mobile/)
+- **TDS React Native**: [tossmini-docs.toss.im/tds-react-native](https://tossmini-docs.toss.im/tds-react-native/)
+
+---
+
 ## 플러그인 카테고리
 
 - **콘텐츠 생성**: 블로그, 문서, 기술 글쓰기를 위한 플러그인
 - **개발 도구**: 소프트웨어 개발 워크플로우 지원 플러그인
+- **플랫폼 통합**: 외부 플랫폼 및 서비스 연동 플러그인 (앱인토스, Firebase 등)
 - **문서화**: 기술 문서 및 API 문서 작성 플러그인
 - **생산성**: 개발 생산성 향상을 위한 유틸리티 플러그인
 

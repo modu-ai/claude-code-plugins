@@ -1,0 +1,75 @@
+.task-item {
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: var(--rounded-sm);
+}
+
+.sortable-ghost {
+  opacity: 0;
+}
+
+.sortable-drag div {
+  border-radius: var(--rounded-xs);
+  overflow: hidden;
+}
+
+.task-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: fit-content;
+  min-height: 52px;
+}
+
+.delete-button {
+  position: absolute;
+  right: 1px;
+  width: 90px;
+  height: 100%;
+  background-color: var(--color-red-400);
+  border-radius: var(--rounded-xs);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-gray-200);
+  border: 1px solid var(--color-gray-200);
+}
+
+.task-like .ri-star-fill {
+  color: var(--color-yellow-400);
+}
+
+.todo-text {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-gray-800);
+}
+
+.done-text {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-gray-400);
+  text-decoration: line-through;
+}
+
+.not-draggable .draggable-handle {
+  pointer-events: none;
+}
+
+.draggable-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
+  font-size: var(--icon-size-md);
+  color: var(--color-gray-400);
+}
